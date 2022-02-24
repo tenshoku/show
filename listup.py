@@ -3,7 +3,7 @@ import os
 
 import discord
 
-import secret
+import secret  # 個人データ
 
 client = discord.Client()
 module_dir = os.path.dirname(__file__)
