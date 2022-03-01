@@ -9,8 +9,6 @@ client = discord.Client()
 module_dir = os.path.dirname(__file__)
 
 # ****************************
-
-
 @client.event
 async def on_ready():
     print("-"*20)
