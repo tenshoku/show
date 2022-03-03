@@ -13,21 +13,19 @@ class TestCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-# 紐付け設定 /set_add *
+# 紐付け設定 /set_add icon_role auth_role calling_name
     @commands.command()
     async def set_add(self, ctx, icon_role, auth_role, calling_name):
+        input_set = {calling_name: {icon_role: auth_role}}
         path = os.path.join(module_dir, 'role.json')  # encoding="utf-8_sig"
         json_open = open(path, 'r', encoding="utf-8_sig")
         json_load = json.load(json_open)
-        name_list = []
 
-        for n in json_load:
-            name_list.append(n)
+        name_list = [n for n in json_load]
         if calling_name in name_list:
-            await ctx.send(f"{n}は、登録済みの名前です。")
+            await ctx.send(f"{calling_name}は、登録済みの名前です。")
 
         else:
-            input_set = {calling_name: {icon_role: auth_role}}
             json_load.update(input_set)
             with open(path, 'w', encoding='utf-8') as f:
                 json.dump(json_load, f, indent=4, ensure_ascii=False)
@@ -103,8 +101,7 @@ class TestCog(commands.Cog):
 
                     await member.remove_roles(remove_role)
 
-                # 指定したアイコンロールを登録
-                await member.add_roles(i_role)
+                await member.add_roles(i_role)# 指定したアイコンロールを登録
                 await ctx.message.delete()
 
             else:
@@ -120,11 +117,8 @@ class TestCog(commands.Cog):
         json_load = json.load(json_open)
 
         member = ctx.message.author
-        has_roles = []
+        has_roles = [r.name for r in member.roles]  # 入力者のロールデータ取得
         ok_roles = []
-
-        for role in member.roles:
-            has_roles.append(role.name)  # 入力者のロールデータ取得
 
         for k, v in json_load.items():  # 登録データから表示可能なアイコンリストの取得
             for ir, ar in v.items():
